@@ -3,7 +3,40 @@ json_decode
 
 Simple tool to parse JSON data from the commandline.
 
+Example
+=======
+
+data.json:
+```json
+{"id":10003, "user": "John", "text": "Example Text", "birthday": {"day": 1, "month": 1}}
+{"id":10005, "user": "Jack", "text": "Some other text\nExtra line", "birthday": {"day": 2, "month": 2}}
 ```
+Usage:
+```console
+$ cat data.json | json_decode.py "{user} said: {text}"
+John said: Example Text
+Jack said: Some other text
+Extra line
+```
+```console
+$ cat data.json | json_decode.py "{user} has birthday on {birthday[day]}/{birthday[month]}"
+John has birthday on 1/1
+Jack has birthday on 2/2
+```
+```console
+$ cat data.json | json_decode.py -o data_{id}.json
+$ cat data_10003.json
+{"id":10003, "user": "John", "text": "Example Text", "birthday": {"day": 1", "month": 1}}
+```
+```console
+$ cat data.json | json_decode.py {text} -o user_{user}.txt
+$ cat user_Jack.txt
+Some other text
+Extra line
+```
+
+```console
+$ json_decode.py -h
 cat JSON | json_decode.py [FORMAT] [-o OUTPUTFILE]
 
   JSON    json_decode takes input from STDIN. Every line should be a single JSON-object.
